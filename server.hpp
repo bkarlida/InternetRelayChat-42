@@ -2,10 +2,29 @@
 
 # include "irc.hpp"
 
-class server
+class Server
 {
     private:
-        std::string hostname;
-        bool isRegistered = false;
+        // Server variables
+        const std::string hostname;
+        const std::string password;
+        const int port;
+
+        // Socket variables
+        struct sockaddr_in socketAddress;
+        int reuseOption;
+        int _socket;
+        int _bind;
+        int _listen;
+
+        // Private functions
+        std::string hostnameHelper(void);
+        std::string validatePassword(std::string const password);
+        int validatePort(const std::string& port);
+    
+    public:
+        Server(std::string port, std::string password);
+
+        void createAndListen(void);
 
 };
