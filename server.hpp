@@ -21,10 +21,12 @@ class Server
         std::string hostnameHelper(void);
         std::string validatePassword(std::string const password);
         int validatePort(const std::string& port);
+        void printErrExit(std::string message, int status);
     
     public:
         Server(std::string port, std::string password);
 
         void createAndListen(void);
+        void service(void);
 
 };

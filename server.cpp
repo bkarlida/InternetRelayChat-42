@@ -14,27 +14,20 @@ Server::Server(std::string port, std::string password)
 }
 
 
-
 // Helper functions
 std::string Server::hostnameHelper(void)
 {
     char hostname[1024];
     int hostError = gethostname(hostname, 1024);
     if (hostError == -1)
-    {
-        std::cerr << "*** Hostname Error! ***" << std::endl;
-        exit (1);
-    }
+        printErrExit("*** Hostname Error! ***", 1);
     return (hostname);
 }
 
 std::string Server::validatePassword(std::string const password)
 {
     if (password.empty())
-    {
-        std::cerr << "*** Empty Password Error! ***" << std::endl;
-        exit (1);
-    }
+        printErrExit("*** Empty Password Error! ***", 1);
     return (password);
 }
 
@@ -43,11 +36,14 @@ int Server::validatePort(const std::string& port)
     std::string::const_iterator it = port.begin();
     while (it != port.end() && std::isdigit(*it)) ++it;
     if (port.empty() || it != port.end())
-    {
-        std::cerr << "*** Port Error! ***" << std::endl;
-        exit (1);
-    }
+        printErrExit("*** Port Error! ***", 1);
     return (std::stoi(port));
+}
+
+void Server::printErrExit(std::string message, int status)
+{
+    std::cerr << message << std::endl;
+    exit (status);
 }
 
 
@@ -57,32 +53,54 @@ void Server::createAndListen(void)
     // Creating socket TCP and Stream type
     this->_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (this->_socket < 0)
-    {
-        std::cerr << "*** Socket Creation Error! ***" << std::endl;
-        exit (1);
-    }
+        printErrExit("*** Socket Creation Error! ***", 1);
 
     // Setting options of the socket
     this->reuseOption = 1;
     if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &this->reuseOption, 4) == -1)
-    {
-        std::cerr << "*** Socket Option Error! ***" << std::endl;
-        exit (1);
-    }
+        printErrExit("*** Socket Option Error! ***", 1);
 
     // Binding the socket
     this->_bind = bind(_socket, (sockaddr *)&socketAddress, sizeof(socketAddress));
     if (this->_bind)
-    {
-        std::cerr << "*** Binding Socket Error ***" << std::endl;
-        exit (1);
-    }
+        printErrExit("*** Binding Socket Error ***", 1);
 
     // Listening
     this->_listen = listen(this->_socket, 5);
     if (this->_listen)
+        printErrExit("*** Listening Error! ***", 1);
+    std::cout << " - Server is listening on port " << this->port << std::endl;
+}
+
+void Server::service(void)
+{
+    fd_set socket_fds, temp_socket_fds;
+    int max_socket_fd, new_socket_fd;
+    struct sockaddr_in clientAddress;
+    socklen_t addressLen = sizeof(clientAddress);
+
+    // Clearing socket fds and setting it as created socket descriptor
+    FD_ZERO(&socket_fds);
+    FD_SET(_socket, &socket_fds);
+    max_socket_fd = this->_socket;
+
+    while (true)
     {
-        std::cerr << "*** Listening Error! ***" << std::endl;
-        exit (1);
+        temp_socket_fds = socket_fds;
+
+        if (select(max_socket_fd + 1, &temp_socket_fds, NULL, NULL, NULL))
+        {
+            std::cerr << "*** Select Function Error! ***" << std::endl;
+            break ;
+        }
+
+        if (FD_ISSET(this->_socket, &temp_socket_fds))
+        {
+            if (new_socket_fd = accept(this->_socket, (struct sockaddr *)&clientAddress, &addressLen) == -1)
+            {
+                std::cerr << ""
+            }
+        } 
     }
+    close (this->_socket);
 }
