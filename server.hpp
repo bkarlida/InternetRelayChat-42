@@ -12,7 +12,6 @@ class Server
 
         // Socket variables
         struct sockaddr_in socketAddress;
-        int reuseOption;
         int _socket;
         int _bind;
         int _listen;

@@ -56,12 +56,12 @@ void Server::createAndListen(void)
         printErrExit("*** Socket Creation Error! ***", 1);
 
     // Setting options of the socket
-    this->reuseOption = 1;
-    if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &this->reuseOption, 4) == -1)
+    int reuseOption = 1;
+    if (setsockopt(this->_socket, SOL_SOCKET, SO_REUSEADDR, &reuseOption, sizeof(int)) == -1)
         printErrExit("*** Socket Option Error! ***", 1);
 
     // Binding the socket
-    this->_bind = bind(_socket, (sockaddr *)&socketAddress, sizeof(socketAddress));
+    this->_bind = bind(this->_socket, (struct sockaddr *)&this->socketAddress, sizeof(this->socketAddress));
     if (this->_bind)
         printErrExit("*** Binding Socket Error ***", 1);
 
@@ -81,26 +81,48 @@ void Server::service(void)
 
     // Clearing socket fds and setting it as created socket descriptor
     FD_ZERO(&socket_fds);
-    FD_SET(_socket, &socket_fds);
+    FD_SET(this->_socket, &socket_fds);
     max_socket_fd = this->_socket;
 
     while (true)
     {
+        std::cout << "in while\n";
         temp_socket_fds = socket_fds;
 
-        if (select(max_socket_fd + 1, &temp_socket_fds, NULL, NULL, NULL))
+        if (select(max_socket_fd + 1, &temp_socket_fds, NULL, NULL, NULL) == -1)
         {
             std::cerr << "*** Select Function Error! ***" << std::endl;
             break ;
         }
+        std::cout << "after select\n";
 
         if (FD_ISSET(this->_socket, &temp_socket_fds))
         {
-            if (new_socket_fd = accept(this->_socket, (struct sockaddr *)&clientAddress, &addressLen) == -1)
+            std::cout << "in first fdisset\n";
+            if ((new_socket_fd = accept(this->_socket, (struct sockaddr *)&clientAddress, &addressLen)) == -1)
             {
-                std::cerr << ""
+                std::cerr << "*** Accept Funtion Error! ***" << std::endl;
+                break ;
             }
-        } 
+            else
+            {
+                std::cout << " - New connection from " << inet_ntoa(clientAddress.sin_addr) << " on socket " << new_socket_fd << std::endl;
+                FD_SET(new_socket_fd, &socket_fds);
+
+                if (new_socket_fd > max_socket_fd)
+                    max_socket_fd = new_socket_fd;
+            }
+        }
+        std::cout << "after first isset\n";
+        if (FD_ISSET(new_socket_fd, &temp_socket_fds))
+        {
+            std::cout << "in fd_isset \n";
+            char buffer[1024];
+            int bytes_recieved = recv(new_socket_fd, buffer, sizeof(buffer), 0);
+
+            buffer[bytes_recieved] = '\0';
+            std::cout << "buffer: #" << buffer << "#" << std::endl;
+        }
     }
     close (this->_socket);
 }
