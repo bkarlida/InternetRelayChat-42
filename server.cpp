@@ -74,55 +74,84 @@ void Server::createAndListen(void)
 
 void Server::service(void)
 {
-    fd_set socket_fds, temp_socket_fds;
-    int max_socket_fd, new_socket_fd;
+    const int MAX_CLIENTS = 5;
+    struct pollfd fds[MAX_CLIENTS + 1]; // +1 for listening socket
     struct sockaddr_in clientAddress;
     socklen_t addressLen = sizeof(clientAddress);
 
     // Clearing socket fds and setting it as created socket descriptor
-    FD_ZERO(&socket_fds);
-    FD_SET(this->_socket, &socket_fds);
-    max_socket_fd = this->_socket;
+    fds[0].fd = _socket;
+    fds[0].events = POLLIN;
+
+    for (int i = 1; i < MAX_CLIENTS + 1; ++i)
+    {
+        fds[i].fd = -1;
+        fds[i].events = POLLIN;
+    }
 
     while (true)
     {
-        std::cout << "in while\n";
-        temp_socket_fds = socket_fds;
-
-        if (select(max_socket_fd + 1, &temp_socket_fds, NULL, NULL, NULL) == -1)
+        int activity = poll(fds, MAX_CLIENTS + 1, -1);
+        if (activity == -1)
         {
-            std::cerr << "*** Select Function Error! ***" << std::endl;
-            break ;
+            std::cerr << "*** Poll Function Error! ***" << std::endl;
+            break;
         }
-        std::cout << "after select\n";
 
-        if (FD_ISSET(this->_socket, &temp_socket_fds))
+        // Check if listening socket has some activity
+        if (fds[0].revents & POLLIN)
         {
-            std::cout << "in first fdisset\n";
-            if ((new_socket_fd = accept(this->_socket, (struct sockaddr *)&clientAddress, &addressLen)) == -1)
+            int new_socket_fd = accept(_socket, (struct sockaddr *)&clientAddress, &addressLen);
+            if (new_socket_fd == -1)
             {
-                std::cerr << "*** Accept Funtion Error! ***" << std::endl;
-                break ;
+                std::cerr << "*** Accept Function Error! ***" << std::endl;
+                break;
             }
             else
             {
                 std::cout << " - New connection from " << inet_ntoa(clientAddress.sin_addr) << " on socket " << new_socket_fd << std::endl;
-                FD_SET(new_socket_fd, &socket_fds);
 
-                if (new_socket_fd > max_socket_fd)
-                    max_socket_fd = new_socket_fd;
+                // Add new socket to fds array
+                for (int i = 1; i < MAX_CLIENTS + 1; ++i)
+                {
+                    if (fds[i].fd == -1)
+                    {
+                        fds[i].fd = new_socket_fd;
+                        break;
+                    }
+                }
             }
         }
-        std::cout << "after first isset\n";
-        if (FD_ISSET(new_socket_fd, &temp_socket_fds))
-        {
-            std::cout << "in fd_isset \n";
-            char buffer[1024];
-            int bytes_recieved = recv(new_socket_fd, buffer, sizeof(buffer), 0);
 
-            buffer[bytes_recieved] = '\0';
-            std::cout << "buffer: #" << buffer << "#" << std::endl;
+        // Check for IO operation on existing sockets
+        for (int i = 1; i < MAX_CLIENTS + 1; ++i)
+        {
+            if (fds[i].fd != -1 && fds[i].revents & POLLIN)
+            {
+                char buffer[1024];
+                int bytes_recieved = recv(fds[i].fd, buffer, sizeof(buffer), 0);
+
+                if (bytes_recieved <= 0)
+                {
+                    // Connection closed or error occurred
+                    if (bytes_recieved == 0)
+                        std::cout << " - Connection closed on socket " << fds[i].fd << std::endl;
+                    else
+                        std::cerr << "*** Recv Function Error! ***" << std::endl;
+
+                    // Close socket and remove from fds array
+                    close(fds[i].fd);
+                    fds[i].fd = -1;
+                }
+                else
+                {
+                    buffer[bytes_recieved] = '\0';
+                    std::cout << " - Received data from socket " << fds[i].fd << ": #" << buffer << "#" << std::endl;
+                }
+            }
         }
     }
-    close (this->_socket);
+
+    // Close listening socket
+    close(_socket);
 }
