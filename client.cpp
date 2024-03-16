@@ -1,57 +1,62 @@
 
 #include "Client.hpp"
 
-void    ClientInfo::set_password(std::string pass)
+Client::Client(int fd, sockaddr_in addr) : socket_fd(fd), address(addr)
+{
+    this->isregister = false;
+}
+
+void    Client::set_password(std::string pass)
 {
     password = pass;
 }
 
-void    ClientInfo::set_username(std::string user)
+void    Client::set_username(std::string user)
 {
     username = user;
 }
 
-void    ClientInfo::set_nickname(std::string nick)
+void    Client::set_nickname(std::string nick)
 {
     nickname = nick;
 }
 
-void    ClientInfo::set_realname(std::string real)
+void    Client::set_realname(std::string real)
 {
     realname = real;
 }
 
-std::string  ClientInfo::get_password()
+std::string  Client::get_password()
 {
     return password;
 }
 
-std::string  ClientInfo::get_username()
+std::string  Client::get_username()
 {
     return username;
 }
 
-std::string  ClientInfo::get_nickname()
+std::string  Client::get_nickname()
 {
     return nickname;
 }
 
-std::string  ClientInfo::get_realname()
+std::string  Client::get_realname()
 {
     return realname;
 }
 
-std::string ClientInfo::getPrefix()
+std::string Client::getPrefix()
 {
     return ":" + this->get_nickname() + "!" + this->get_username() + "@" + this->hostname + ":";
 }
 
-int    ClientInfo::get_joined(ClientInfo *ite)
-{
-    for (std::vector<Channel>::iterator it = isjoined.begin(); it != isjoined.end(); it++)
-    {
-        if (it->ChannelName == ite->get_nickname())
-            return 1;
-    }
-    return 0;
-}
+// int    Client::get_joined(Client *ite)
+// {
+//     for (std::vector<Channel>::iterator it = isjoined.begin(); it != isjoined.end(); it++)
+//     {
+//         if (it->ChannelName == ite->get_nickname())
+//             return 1;
+//     }
+//     return 0;
+// }
