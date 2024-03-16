@@ -1,15 +1,9 @@
-
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
-
+#pragma once
 
 #include "server.hpp"
-//#include "Channel.hpp"
-#include "Client.hpp"
 
 
-
-class Channel;
+// class Channel;
 class Client;
 
 class Client
@@ -21,8 +15,8 @@ class Client
         std::string realname;
 
     public:
-        int socket_fd;
-        sockaddr_in address;
+        const int socket_fd;
+        const sockaddr_in address;
         //std::vector <Channel> isjoined;
         bool isregister;
         std::string get_password();
@@ -43,5 +37,3 @@ class Client
 
         Client(int fd, sockaddr_in addr);
 };
-
-#endif

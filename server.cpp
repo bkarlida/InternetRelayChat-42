@@ -1,4 +1,5 @@
 #include "server.hpp"
+#include "client.hpp"
 
 // Constructor function
 Server::Server(std::string port, std::string password)
@@ -78,6 +79,7 @@ void Server::service(void)
     struct pollfd fds[MAX_CLIENTS + 1]; // +1 for listening socket
     struct sockaddr_in clientAddress;
     socklen_t addressLen = sizeof(clientAddress);
+    std::vector<Client> clients;
 
     // Clearing socket fds and setting it as created socket descriptor
     fds[0].fd = _socket;
@@ -87,10 +89,12 @@ void Server::service(void)
     {
         fds[i].fd = -1;
         fds[i].events = POLLIN;
+        fds[i].revents = 0;   // suspicious
     }
 
     while (true)
     {
+        int i = 0;
         int activity = poll(fds, MAX_CLIENTS + 1, -1);
         if (activity == -1)
         {
@@ -110,6 +114,18 @@ void Server::service(void)
             else
             {
                 std::cout << " - New connection from " << inet_ntoa(clientAddress.sin_addr) << " on socket " << new_socket_fd << std::endl;
+
+                // Creat new client element
+                clients.push_back(Client(new_socket_fd, clientAddress));
+                
+
+                for (std::vector<Client>::iterator iter = clients.begin(); iter != clients.end();)
+                {
+                    std::cout << "socket fd " << i << ": " << inet_ntoa(iter->address.sin_addr) << std::endl;
+                    i++;
+                    ++iter;
+                }
+
 
                 // Add new socket to fds array
                 for (int i = 1; i < MAX_CLIENTS + 1; ++i)

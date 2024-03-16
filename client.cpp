@@ -1,5 +1,5 @@
 
-#include "Client.hpp"
+#include "client.hpp"
 
 Client::Client(int fd, sockaddr_in addr) : socket_fd(fd), address(addr)
 {
