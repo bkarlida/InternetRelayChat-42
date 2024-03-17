@@ -15,8 +15,8 @@ class Client
         std::string realname;
 
     public:
-        const int socket_fd;
-        const sockaddr_in address;
+        int socket_fd;
+        sockaddr_in address;
         //std::vector <Channel> isjoined;
         bool isregister;
         std::string get_password();
