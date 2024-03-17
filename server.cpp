@@ -155,6 +155,8 @@ void Server::service(void)
                         std::cerr << "*** Recv Function Error! ***" << std::endl;
 
                     // Close socket and remove from fds array
+                    clients.erase(clients.begin() + i - 1);
+
                     close(fds[i].fd);
                     fds[i].fd = -1;
                 }
