@@ -115,15 +115,14 @@ void Server::service(void)
             {
                 std::cout << " - New connection from " << inet_ntoa(clientAddress.sin_addr) << " on socket " << new_socket_fd << std::endl;
 
-                // Creat new client element
+                // Creat new client element and push to vector
                 clients.push_back(Client(new_socket_fd, clientAddress));
                 
 
-                for (std::vector<Client>::iterator iter = clients.begin(); iter != clients.end();)
+                for (std::vector<Client>::iterator iter = clients.begin(); iter != clients.end(); iter++)
                 {
-                    std::cout << "socket fd " << i << ": " << inet_ntoa(iter->address.sin_addr) << std::endl;
+                    std::cout << "socket fd " << iter->socket_fd << ": " << inet_ntoa(iter->address.sin_addr) << std::endl;
                     i++;
-                    ++iter;
                 }
 
 
