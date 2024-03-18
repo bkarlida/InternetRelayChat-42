@@ -36,6 +36,10 @@ class Server;
 # include <vector>
 # include <sstream>
 # include "client.hpp"
+# include <string>
+# include <map>
+# include <functional>
+# include <unordered_map>
 
 Client * getClientByFd(std::vector <Client> clients, int fd);
 int 	commandInterface(std::string buffer, Client *client, std::vector <Client> clients);
