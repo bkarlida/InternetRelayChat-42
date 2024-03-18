@@ -17,12 +17,12 @@ class Server
         int _listen;
 
         // Private functions
-        std::string hostnameHelper(void);
         std::string validatePassword(std::string const password);
         int validatePort(const std::string& port);
         void printErrExit(std::string message, int status);
     
     public:
+        std::string hostnameHelper(void);
         Server(std::string port, std::string password);
 
         void createAndListen(void);

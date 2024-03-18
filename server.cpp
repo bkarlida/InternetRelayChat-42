@@ -1,3 +1,4 @@
+#include "irc.hpp"
 #include "server.hpp"
 #include "client.hpp"
 
@@ -163,6 +164,7 @@ void Server::service(void)
                 else
                 {
                     buffer[bytes_recieved] = '\0';
+                    commandInterface(buffer, getClientByFd(clients, fds[i].fd));
                     std::cout << " - Received data from socket " << fds[i].fd << ": #" << buffer << "#" << std::endl;
                 }
             }
