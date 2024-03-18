@@ -23,6 +23,7 @@ class Server
     
     public:
         std::string hostnameHelper(void);
+        std::string getPassword(void);
         Server(std::string port, std::string password);
 
         void createAndListen(void);

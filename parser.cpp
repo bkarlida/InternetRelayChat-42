@@ -1,47 +1,51 @@
 #include "client.hpp"
 #include "server.hpp"
 
-void	commandInterface(std::string buffer, Client *client)
+int	commandInterface(std::string buffer, Client *client, std::vector <Client> clients, Server &server)
 {
-	int		i;
-	int		index;
+	std::cout << "girdiii \n\n\n\n";
+    std::string pass;
+    std::string nick;
+    std::string user;
+    std::string real;
+    
+    std::stringstream stringStream(buffer);
+    
+    std::vector <std::string> splitStrings;
 
-	i = 0;
-	std::vector<std::string> commands;
-	index = buffer.find('\n', i);
-	int indexx = buffer.find('\n',(index + 1));
-	while (index != std::string::npos)
-	{
-		commands.push_back(buffer.substr(i, index - i));
-		i = index + 1;
-		index = buffer.find('\n', i);
-	}
-	for (std::vector<std::string>::iterator y = commands.begin(); y != commands.end(); y++)
-	{
-		std::cout << "*" << *y << std::endl;
-	}
-	std::vector<std::string>::iterator iter = commands.begin();
+    for (std::string line; std::getline(stringStream, line, '\n'); )
+        splitStrings.push_back(line);
 
-	iter = commands.begin();
-	i = 0;
-	index = iter->find(':',i);
-	//iter.set_password(iter->substr(index + 1, iter++->length() - 2));
-	std::cout <<"*9"<<  iter->substr(index + 1, iter++->length() - 2)<<std::endl;
+    std::vector <std::string>::iterator iter = splitStrings.begin();
 
+    if (iter->size() > 4 && iter->substr(0, 4) == "PASS")
+        pass = iter->substr(6), iter++;
 
-	i = 0;
-	index = iter->find(' ',i);
-	//iter.set_nickname(iter->substr(index + 1, iter++->length() - (index + 3)));
-	std::cout <<"*6"<<  iter->substr(index + 1, iter++->length() - (index + 3))<<std::endl;
+    if (iter->size() > 4 && iter->substr(0, 4) == "NICK")
+        nick = iter->substr(5), iter++;
+    else
+        return 0;
 
-	i = 0;
-	index = iter->find(' ',i);
-	indexx = iter->find(' ',index + 1);
-	//iter.set_username(iter->substr(index + 1, indexx - (index + 1)));
-	std::cout <<"*5"<<  iter->substr(index + 1, indexx - (index + 1))<<std::endl;
+    if (iter->size() > 4 && iter->substr(0, 4) == "USER")
+    {
+        user = iter->substr(5, iter->find(' ', 5) - 5);
+        real = iter->substr(iter->find(':') + 5);
+    }
+    else
+        return 0;
 
-	index = iter->find(':', indexx);
-	//iter.set_realname(iter->substr(index + 1, (iter->length() - index) - 3));
-	std::cout <<"*4"<<  iter->substr(index + 1, (iter->length() - index) - 3)<<std::endl;
+    if (pass.erase(pass.size() - 1) == server.getPassword())
+		client->isRegistered = true;
 
+	client->set_username(user);
+	client->set_nickname(nick);
+	client->set_realname(real);
+
+	return 1;
+}
+
+void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server)
+{
+    if (commandInterface(buffer, client, clients, *server))
+		std::cout << "isRegistered: " << client->isRegistered << std::endl; 
 }

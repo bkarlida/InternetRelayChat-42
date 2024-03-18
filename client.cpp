@@ -3,7 +3,7 @@
 
 Client::Client(int fd, sockaddr_in addr) : socket_fd(fd), address(addr)
 {
-    this->isregister = false;
+    this->isRegistered = false;
 }
 
 void    Client::set_password(std::string pass)

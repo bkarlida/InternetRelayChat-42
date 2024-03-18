@@ -164,7 +164,7 @@ void Server::service(void)
                 else
                 {
                     buffer[bytes_recieved] = '\0';
-                    commandInterface(buffer, getClientByFd(clients, fds[i].fd));
+                    handleBuffer(buffer, getClientByFd(clients, fds[i].fd), clients, this);
                     std::cout << " - Received data from socket " << fds[i].fd << ": #" << buffer << "#" << std::endl;
                 }
             }
@@ -174,3 +174,8 @@ void Server::service(void)
     // Close listening socket
     close(_socket);
 }
+
+
+// Setter and Getter Functions
+std::string Server::getPassword(void)
+{ return (this->password); }

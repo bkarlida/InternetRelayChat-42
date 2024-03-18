@@ -18,7 +18,7 @@ class Client
         int socket_fd;
         sockaddr_in address;
         //std::vector <Channel> isjoined;
-        bool isregister;
+        bool isRegistered;
         std::string get_password();
         std::string get_username();
         std::string get_nickname();
