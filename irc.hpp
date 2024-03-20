@@ -18,7 +18,7 @@
 # define ERR_NICKNAMEINUSE(nick) ("433 * " + nick + " :Nickname is already in use" + "\r\n")
 # define ERR_ERRONEUSNICKNAME(nick) ("432 " + nick + " :Erroneus nickname")
 # define ERR_ALREADYREGISTRED() ("462 :You may not reregister\r\n")
-# define ERR_PASSWDMISMATCH() ("464 :Password incorrect\r\n")
+# define ERR_PASSWDMISMATCH() ("462 :Password incorrect\r\n")
 
 
 
@@ -37,9 +37,7 @@ class Server;
 # include <sstream>
 # include "client.hpp"
 # include <string>
-# include <map>
-# include <functional>
-# include <unordered_map>
+# include "./command/command.hpp"
 
 Client * getClientByFd(std::vector <Client> clients, int fd);
 int 	commandInterface(std::string buffer, Client *client, std::vector <Client> clients);

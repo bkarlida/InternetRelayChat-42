@@ -13,8 +13,7 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
     std::vector <std::string>::iterator iter = splitStrings.begin();
     if (iter->size() > 4 && iter->substr(0, 4) == "PASS")
         pass = iter->substr(6), iter++;
-    else
-        return 0;
+ 
     if (iter->size() > 4 && iter->substr(0, 4) == "NICK")
         nick = iter->substr(5), iter++;
     else
@@ -26,11 +25,12 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
     }
     else
         return 0;
-    if (pass.erase(pass.size() - 1) == server.getPassword())
-        client->isRegistered = true;
+    if (!pass.empty() && pass.erase(pass.size() - 1) == server.getPassword())
+        client->isRegistered = true, client->isPassed = true;
     client->set_username(user);
     client->set_nickname(nick);
     client->set_realname(real);
+    std::cout << real << user << nick << std::endl;
     return 1;
 }
 
@@ -70,7 +70,8 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server)
     std::vector<std::string>::iterator k = ite->commands.begin();
     if ("PASS" == *k)
     {
-       
+       std::cout << "in pass" << std::endl; 
+       pass(*ite, *server);
     }
     
 }
@@ -80,7 +81,8 @@ void handleBuffer(std::string buffer, Client *client, std::vector <Client> clien
 {
     if (commandInterface(buffer, client, clients, *server))
     {
-         std::cout << "isRegistered: " << std::endl;
+         std::cout << "command interface return" << std::endl;
+         return ;
     }
     commandParser(buffer, clients, *client);
     commandSearch(clients, client, server);

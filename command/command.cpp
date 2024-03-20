@@ -1,3 +1,3 @@
-#include "server.hpp"
+#include "../server.hpp"
 #include "command.hpp"
 

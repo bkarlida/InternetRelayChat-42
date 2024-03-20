@@ -1,6 +1,5 @@
 
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
+#pragma once
 
 # define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n")
 # define user_id(nickname, username) (":" + nickname + "!" + username + "@localhost" + "\r\n")
@@ -11,11 +10,10 @@
 # define ERR_NICKNAMEINUSE(nick) ("433 * " + nick + " :Nickname is already in use" + "\r\n")
 # define ERR_ERRONEUSNICKNAME(nick) ("432 " + nick + " :Erroneus nickname")
 
-#include "server.hpp"
+#include "../server.hpp"
 
 class Client;
 class Server;
 
+void pass(Client & client, Server & server);
 
-
-#endif

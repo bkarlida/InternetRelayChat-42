@@ -19,6 +19,7 @@ class Client
         sockaddr_in address;
         //std::vector <Channel> isjoined;
         bool isRegistered;
+        bool isPassed;
         std::string get_password();
         std::string get_username();
         std::string get_nickname();
