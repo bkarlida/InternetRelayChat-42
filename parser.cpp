@@ -73,11 +73,11 @@ void commandSearch(std::vector<Client> clients, Client &ite, Server &server)
 
 void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server)
 {
-    commandParser(buffer, clients, *client);
-    // if (commandInterface(buffer, client, clients, *server))
-    // {
-    //      std::cout << "isRegistered: " << std::endl;
-    // }
+    if (commandInterface(buffer, client, clients, *server))
+    {
+         std::cout << "isRegistered: " << std::endl;
+    }
+    //commandParser(buffer, clients, *client);
 }
 
  

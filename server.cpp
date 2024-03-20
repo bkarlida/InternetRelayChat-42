@@ -149,15 +149,16 @@ void Server::service(void)
 
                 if (bytes_recieved <= 0)
                 {
-                    // Connection closed or error occurred
                     if (bytes_recieved == 0)
                         std::cout << " - Connection closed on socket " << fds[i].fd << std::endl;
                     else
                         std::cerr << "*** Recv Function Error! ***" << std::endl;
 
-                    // Close socket and remove from fds array
                     clients.erase(clients.begin() + i - 1);
-
+                    for (int j = i; j < MAX_CLIENTS; ++j) {
+                        fds[j] = fds[j + 1];
+                    }
+                    fds[MAX_CLIENTS].fd = -1;
                     close(fds[i].fd);
                     fds[i].fd = -1;
                 }
