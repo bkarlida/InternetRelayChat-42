@@ -65,9 +65,14 @@ void    commandParser(std::string buffer,std::vector<Client> clients,Client &ite
  
  }
 
-void commandSearch(std::vector<Client> clients, Client &ite, Server &server)
+void commandSearch(std::vector<Client> clients, Client *ite, Server *server)
 {
-
+    std::vector<std::string>::iterator k = ite->commands.begin();
+    if ("PASS" == *k)
+    {
+       
+    }
+    
 }
 
 
@@ -77,7 +82,8 @@ void handleBuffer(std::string buffer, Client *client, std::vector <Client> clien
     {
          std::cout << "isRegistered: " << std::endl;
     }
-    //commandParser(buffer, clients, *client);
+    commandParser(buffer, clients, *client);
+    commandSearch(clients, client, server);
 }
 
  
