@@ -76,7 +76,7 @@ void Server::createAndListen(void)
 
 void Server::service(void)
 {
-    const int MAX_CLIENTS = 5;
+    const int MAX_CLIENTS = 50;
     struct pollfd fds[MAX_CLIENTS + 1]; // +1 for listening socket
     struct sockaddr_in clientAddress;
     socklen_t addressLen = sizeof(clientAddress);
@@ -95,7 +95,6 @@ void Server::service(void)
 
     while (true)
     {
-        int i = 0;
         int activity = poll(fds, MAX_CLIENTS + 1, -1);
         if (activity == -1)
         {
@@ -114,26 +113,31 @@ void Server::service(void)
             }
             else
             {
-                std::cout << " - New connection from " << inet_ntoa(clientAddress.sin_addr) << " on socket " << new_socket_fd << std::endl;
-
-                // Creat new client element and push to vector
-                clients.push_back(Client(new_socket_fd, clientAddress));
-                
-
-                for (std::vector<Client>::iterator iter = clients.begin(); iter != clients.end(); iter++)
+                if (clients.size() >= MAX_CLIENTS)
                 {
-                    std::cout << "socket fd " << iter->socket_fd << ": " << inet_ntoa(iter->address.sin_addr) << std::endl;
-                    i++;
+                    std::cout << " - Maximum client size reached\n";
+                    // ! check notes for this job!
                 }
-
-
-                // Add new socket to fds array
-                for (int i = 1; i < MAX_CLIENTS + 1; ++i)
+                else
                 {
-                    if (fds[i].fd == -1)
+                    std::cout << " - New connection from " << inet_ntoa(clientAddress.sin_addr) << " on socket " << new_socket_fd << std::endl;
+
+                    // Creat new client element and push to vector
+                    clients.push_back(Client(new_socket_fd, clientAddress));
+                    
+
+                    for (std::vector<Client>::iterator iter = clients.begin(); iter != clients.end(); iter++)                
+                        std::cout << "socket fd " << iter->socket_fd << ": " << inet_ntoa(iter->address.sin_addr) << std::endl;
+
+
+                    // Add new socket to fds array
+                    for (int i = 1; i < MAX_CLIENTS + 1; ++i)
                     {
-                        fds[i].fd = new_socket_fd;
-                        break;
+                        if (fds[i].fd == -1)
+                        {
+                            fds[i].fd = new_socket_fd;
+                            break;
+                        }
                     }
                 }
             }
@@ -155,12 +159,11 @@ void Server::service(void)
                         std::cerr << "*** Recv Function Error! ***" << std::endl;
 
                     clients.erase(clients.begin() + i - 1);
-                    for (int j = i; j < MAX_CLIENTS; ++j) {
+                    close(fds[i].fd);
+                    for (int j = i; j < MAX_CLIENTS + 1; ++j) {
                         fds[j] = fds[j + 1];
                     }
                     fds[MAX_CLIENTS].fd = -1;
-                    close(fds[i].fd);
-                    fds[i].fd = -1;
                 }
                 else
                 {
