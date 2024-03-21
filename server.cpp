@@ -168,7 +168,7 @@ void Server::service(void)
                 else
                 {
                     buffer[bytes_recieved] = '\0';
-                    handleBuffer(buffer, getClientByFd(clients, fds[i].fd), clients, this);
+                    handleBuffer(buffer, getClientByFd(clients, fds[i].fd), clients, this, &this->channels);
                     std::cout << " - Received data from socket " << fds[i].fd << ": #" << buffer << "#" << std::endl;
                 }
             }

@@ -1,6 +1,7 @@
 #pragma once
 
 # include "irc.hpp"
+# include "channel.hpp"
 
 class Server
 {
@@ -24,6 +25,7 @@ class Server
     public:
         std::string hostnameHelper(void);
         std::string getPassword(void);
+        std::vector <Channel> channels;
         Server(std::string port, std::string password);
 
         void createAndListen(void);

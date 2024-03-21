@@ -24,6 +24,7 @@
 
 class Client;
 class Server;
+class Channel;
 
 # include <iostream>
 # include <netinet/in.h>
@@ -41,4 +42,4 @@ class Server;
 
 Client * getClientByFd(std::vector <Client> clients, int fd);
 int 	commandInterface(std::string buffer, Client *client, std::vector <Client> clients);
-void    handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server);
+void    handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels);

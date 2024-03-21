@@ -52,12 +52,12 @@ std::string Client::getPrefix()
     return ":" + this->get_nickname() + "!" + this->get_username() + "@" + this->hostname + ":";
 }
 
-// int    Client::get_joined(Client *ite)
-// {
-//     for (std::vector<Channel>::iterator it = isjoined.begin(); it != isjoined.end(); it++)
-//     {
-//         if (it->ChannelName == ite->get_nickname())
-//             return 1;
-//     }
-//     return 0;
-// }
+int    Client::get_joined(Client *ite)
+{
+    for (std::vector<Channel>::iterator it = isjoined.begin(); it != isjoined.end(); it++)
+    {
+        if (it->ChannelName == ite->get_nickname())
+            return 1;
+    }
+    return 0;
+}

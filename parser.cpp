@@ -65,7 +65,7 @@ void    commandParser(std::string buffer,std::vector<Client> clients,Client &ite
  
  }
 
-void commandSearch(std::vector<Client> clients, Client *ite, Server *server)
+void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std::vector <Channel> *channels)
 {
     std::vector<std::string>::iterator k = ite->commands.begin();
     if ("PASS" == *k)
@@ -77,7 +77,7 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server)
 }
 
 
-void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server)
+void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels)
 {
     if (commandInterface(buffer, client, clients, *server))
     {
@@ -85,7 +85,7 @@ void handleBuffer(std::string buffer, Client *client, std::vector <Client> clien
          return ;
     }
     commandParser(buffer, clients, *client);
-    commandSearch(clients, client, server);
+    commandSearch(clients, client, server, channels);
 }
 
  

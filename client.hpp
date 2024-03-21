@@ -3,8 +3,7 @@
 #include "server.hpp"
 
 
-// class Channel;
-// class Client;
+class Channel;
 
 class Client
 {
@@ -17,7 +16,7 @@ class Client
     public:
         int socket_fd;
         sockaddr_in address;
-        //std::vector <Channel> isjoined;
+        std::vector <Channel> isjoined;
         bool isRegistered;
         bool isPassed;
         std::string get_password();
