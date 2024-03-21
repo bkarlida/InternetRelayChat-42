@@ -11,11 +11,12 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
     for (std::string line; std::getline(stringStream, line, '\n'); )
         splitStrings.push_back(line);
     std::vector <std::string>::iterator iter = splitStrings.begin();
+
     if (iter->size() > 4 && iter->substr(0, 4) == "PASS")
-        pass = iter->substr(6), iter++;
+        pass = iter->substr(6, iter->find(13, 6) - 6), iter++;
  
     if (iter->size() > 4 && iter->substr(0, 4) == "NICK")
-        nick = iter->substr(5), iter++;
+        nick = iter->substr(5, iter->find(13, 5) - 5), iter++;
     else
         return 0;
     if (iter->size() > 4 && iter->substr(0, 4) == "USER")
@@ -25,17 +26,19 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
     }
     else
         return 0;
-    if (!pass.empty() && pass.erase(pass.size() - 1) == server.getPassword())
+    if (pass == server.getPassword())
         client->isRegistered = true, client->isPassed = true;
+    std::cout << "Client informations updated\n";
     client->set_username(user);
     client->set_nickname(nick);
-    client->set_realname(real);
-    std::cout << real << user << nick << std::endl;
+    client->set_realname(real.erase(real.size() - 1));
     return 1;
 }
 
-void    commandParser(std::string buffer,std::vector<Client> clients,Client &ite)
+void    commandParser(std::string buffer,std::vector<Client> clients,Client * client)
 {
+    std::cout << "parser adress:" << client << std::endl;
+    std::cout << "parser:\n" << client->get_nickname() << std::endl;
     int a;
     if (buffer[buffer.length() - 2] == '\r')
         a = buffer.length() - 2;
@@ -57,9 +60,9 @@ void    commandParser(std::string buffer,std::vector<Client> clients,Client &ite
             i++;
         }
         if (flag == 1)
-            ite.commands.push_back(temp.substr(index, i - index));
+            client->commands.push_back(temp.substr(index, i - index));
     }
-    for (const std::string& command : ite.commands) {
+    for (const std::string& command : client->commands) {
         std::cout << "$" << command << std::endl;
     }
  
@@ -67,13 +70,17 @@ void    commandParser(std::string buffer,std::vector<Client> clients,Client &ite
 
 void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std::vector <Channel> *channels)
 {
+    std::cout << "commandSearch"<<"userName: " + ite->get_username() << "\nrealName" + ite->get_realname()<< std::endl;
     std::vector<std::string>::iterator k = ite->commands.begin();
     if ("PASS" == *k)
     {
-       std::cout << "in pass" << std::endl; 
+       std::cout << "in pass" << std::endl;
        pass(*ite, *server);
     }
-    
+    else if ("USER" == *k)
+    {
+        user(clients, *ite, *server);
+    }
 }
 
 
@@ -81,10 +88,10 @@ void handleBuffer(std::string buffer, Client *client, std::vector <Client> clien
 {
     if (commandInterface(buffer, client, clients, *server))
     {
-         std::cout << "command interface return" << std::endl;
-         return ;
+        std::cout << "command interface return" << std::endl;
+        return ;
     }
-    commandParser(buffer, clients, *client);
+    commandParser(buffer, clients, client);
     commandSearch(clients, client, server, channels);
 }
 

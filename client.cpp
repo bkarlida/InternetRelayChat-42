@@ -29,22 +29,22 @@ void    Client::set_realname(std::string real)
 
 std::string  Client::get_password()
 {
-    return password;
+    return this->password;
 }
 
 std::string  Client::get_username()
 {
-    return username;
+    return this->username;
 }
 
 std::string  Client::get_nickname()
 {
-    return nickname;
+    return this->nickname;
 }
 
 std::string  Client::get_realname()
 {
-    return realname;
+    return this->realname;
 }
 
 std::string Client::getPrefix()

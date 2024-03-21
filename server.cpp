@@ -124,10 +124,6 @@ void Server::service(void)
 
                     // Creat new client element and push to vector
                     clients.push_back(Client(new_socket_fd, clientAddress));
-                    
-
-                    for (std::vector<Client>::iterator iter = clients.begin(); iter != clients.end(); iter++)                
-                        std::cout << "socket fd " << iter->socket_fd << ": " << inet_ntoa(iter->address.sin_addr) << std::endl;
 
 
                     // Add new socket to fds array
@@ -168,7 +164,7 @@ void Server::service(void)
                 else
                 {
                     buffer[bytes_recieved] = '\0';
-                    handleBuffer(buffer, getClientByFd(clients, fds[i].fd), clients, this, &this->channels);
+                    handleBuffer(buffer, &clients[i -1], clients, this, &this->channels);
                     std::cout << " - Received data from socket " << fds[i].fd << ": #" << buffer << "#" << std::endl;
                 }
             }

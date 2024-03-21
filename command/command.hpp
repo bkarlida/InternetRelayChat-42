@@ -15,5 +15,5 @@
 class Client;
 class Server;
 
-void pass(Client & client, Server & server);
+void pass(Client * client, Server * server);
 
