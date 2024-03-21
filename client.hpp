@@ -8,12 +8,12 @@ class Channel;
 class Client
 {
     private:
-
-    public:
         std::string password;
         std::string username;
         std::string nickname;
         std::string realname;
+
+    public:
         int socket_fd;
         sockaddr_in address;
         std::vector <Channel> isjoined;

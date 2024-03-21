@@ -46,6 +46,8 @@ void user(std::vector<Client>& clients, Client& ite, Server& server) {
 
     ite.set_username(userService[1]);
     ite.set_realname(userService[4]);
+    message = USERINFOADD();
+    send(ite.socket_fd, message.c_str(), message.size(), 0);
 
 	std::cout << "userName: " + ite.get_username() << "\nrealName" + ite.get_realname()<< std::endl;
 

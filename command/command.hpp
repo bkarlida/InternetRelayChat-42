@@ -16,4 +16,5 @@ class Client;
 class Server;
 
 void pass(Client * client, Server * server);
+void user(std::vector<Client>& clients, Client& ite, Server& server);
 
