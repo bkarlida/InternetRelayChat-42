@@ -3,6 +3,12 @@
 
 void user(std::vector<Client>& clients, Client& ite, Server& server) {
     std::string message;
+    if (!ite.isPassed)
+    {
+        std::string message = "462 :Client should enter the password correctly\r\n";
+        send(ite.socket_fd, message.c_str(), message.size(), 0);
+        return ;
+    }
 
     if (ite.isRegistered == true) {
         message = ERR_ALREADYREGISTRED();

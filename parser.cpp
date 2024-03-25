@@ -76,9 +76,16 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     {
        pass(ite, server);
     }
-    else if ("USER" == *k)
+    else if ("USER" == *k )
     {
         user(clients, *ite, *server);
+    }
+    else if (!ite->isRegistered)
+    {
+        std::string err = ERR_ALREADYREGISTRED();
+        size_t lenght = err.length();
+        send(ite->socket_fd, err.c_str(), lenght, 0);
+        return ;
     }
 }
 
