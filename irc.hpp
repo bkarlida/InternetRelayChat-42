@@ -18,7 +18,9 @@
 # define ERR_NICKNAMEINUSE(nick) ("433 * " + nick + " :Nickname is already in use" + "\r\n")
 # define ERR_ERRONEUSNICKNAME(nick) ("432 " + nick + " :Erroneus nickname")
 # define ERR_ALREADYREGISTRED() ("462 :The client is already registered\r\n")
+# define ERR_NEEDREGISTER() ("462 :The client need to register. Use PASS and USER commands.\r\n")
 # define ERR_PASSWDMISMATCH() ("462 :Password incorrect\r\n")
+# define ERR_PASSWREQUIRED() ("462 :Password required to login\r\n")
 # define ERR_WRONGPARAM() ("462 :Wrong amount parameters entered\r\n")
 # define USERINFOADD() (":Client informations updated\r\n")
 

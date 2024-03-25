@@ -29,6 +29,18 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
         return 0;
     if (pass == server.getPassword())
         client->isRegistered = true, client->isPassed = true;
+    // else if (!pass.empty())
+    // {
+    //     std::string err = ERR_PASSWDMISMATCH();
+    //     size_t lenght = err.length();
+    //     send(client->socket_fd, err.c_str(), lenght, 0);
+    // }
+    // else
+    // {
+    //     std::string err = ERR_PASSWREQUIRED();
+    //     size_t lenght = err.length();
+    //     send(client->socket_fd, err.c_str(), lenght, 0);
+    // }
     std::cout << "Client informations updated\n";
     client->set_username(user);
     client->set_nickname(nick);
@@ -74,7 +86,7 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     std::vector<std::string>::iterator k = ite->commands.begin();
     if ("PASS" == *k)
     {
-       pass(ite, server);
+    //    pass(ite, server);
     }
     else if ("USER" == *k )
     {
@@ -82,7 +94,7 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     }
     else if (!ite->isRegistered)
     {
-        std::string err = ERR_ALREADYREGISTRED();
+        std::string err = ERR_NEEDREGISTER();
         size_t lenght = err.length();
         send(ite->socket_fd, err.c_str(), lenght, 0);
         return ;
