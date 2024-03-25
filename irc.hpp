@@ -20,7 +20,7 @@
 # define ERR_ALREADYREGISTRED() ("462 :The client is already registered\r\n")
 # define ERR_PASSWDMISMATCH() ("462 :Password incorrect\r\n")
 # define ERR_WRONGPARAM() ("462 :Wrong amount parameters entered\r\n")
-# define USERINFOADD() ("003 :Client informations updated\r\n")
+# define USERINFOADD() (":Client informations updated\r\n")
 
 
 

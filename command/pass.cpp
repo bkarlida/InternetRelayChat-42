@@ -29,8 +29,9 @@ void pass(Client * client, Server * server)
         send(client->socket_fd, err.c_str(), lenght, 0);
         return ;
     }
+    std::string message = "this message is fuck\r\n";
     if (!client->get_nickname().empty() && !client->get_realname().empty() && !client->get_username().empty())
-        client->isRegistered = true, client->isPassed = true, send(client->socket_fd, "Server: Register completed.\r\n", 29, 0);
+        client->isRegistered = true, client->isPassed = true, send(client->socket_fd, message.c_str(), message.size(), 0);
     else
         client->isPassed = true, send(client->socket_fd, "Server: Password is correct. USER informations needed to register.\r\n", 68, 0);
     std::cout << client->isPassed << client->isRegistered << std::endl;
