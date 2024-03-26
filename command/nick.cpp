@@ -1,7 +1,7 @@
 #include "command.hpp"
 
 
-void NICK(std::vector<Client>& clients, Client& ite, Server& server, std::vector<Channel>& channels) {
+void nick(std::vector<Client>& clients, Client& ite, Server& server, std::vector<Channel>& channels) {
     std::vector<Channel>::iterator channelIterator = channels.begin();
     std::vector<Client>::iterator clientIterator = clients.begin();
     std::vector<std::string>::iterator commandIterator = ite.commands.begin();

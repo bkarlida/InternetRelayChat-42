@@ -100,6 +100,10 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     {
         return ;
     }
+    else if ("NICK" == *k )
+    {
+        nick(clients, *ite, *server, *channels);
+    }
 }
 
 
