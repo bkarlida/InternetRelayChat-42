@@ -43,7 +43,7 @@ void user(std::vector<Client>& clients, Client& ite, Server& server) {
     }
 
     if (userService.size() != 5 && userService[2][0] != '0' && userService[3][0] != '*') {
-        message = ite.getPrefix() + ": Error: Wrong userparameters\r\n";
+        message = ite.getPrefix() + ERR_WRONGPARAM();
         send(ite.socket_fd, message.c_str(), message.size(), 0);
         return;
     }

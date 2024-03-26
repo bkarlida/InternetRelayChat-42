@@ -1,51 +1,12 @@
 #include "client.hpp"
 #include "server.hpp"
-int commandInterface(std::string buffer, Client *client, std::vector <Client> clients, Server &server)
+std::vector <std::string> commandSplitter(std::string buffer)
 {
-    std::string pass;
-    std::string nick;
-    std::string user;
-    std::string real;
     std::stringstream stringStream(buffer);
     std::vector <std::string> splitStrings;
     for (std::string line; std::getline(stringStream, line, '\n'); )
         splitStrings.push_back(line);
-    std::vector <std::string>::iterator iter = splitStrings.begin();
-    if (splitStrings.size() < 2)
-        return 0;
-    if (iter->size() > 4 && iter->substr(0, 4) == "PASS")
-        pass = iter->substr(6, iter->find(13, 6) - 6), iter++;
- 
-    if (iter->size() > 4 && iter->substr(0, 4) == "NICK")
-        nick = iter->substr(5, iter->find(13, 5) - 5), iter++;
-    else
-        return 0;
-    if (iter->size() > 4 && iter->substr(0, 4) == "USER")
-    {
-        user = iter->substr(5, iter->find(' ', 5) - 5);
-        real = iter->substr(iter->find(':') + 5);
-    }
-    else
-        return 0;
-    if (pass == server.getPassword())
-        client->isRegistered = true, client->isPassed = true;
-    // else if (!pass.empty())
-    // {
-    //     std::string err = ERR_PASSWDMISMATCH();
-    //     size_t lenght = err.length();
-    //     send(client->socket_fd, err.c_str(), lenght, 0);
-    // }
-    // else
-    // {
-    //     std::string err = ERR_PASSWREQUIRED();
-    //     size_t lenght = err.length();
-    //     send(client->socket_fd, err.c_str(), lenght, 0);
-    // }
-    std::cout << "Client informations updated\n";
-    client->set_username(user);
-    client->set_nickname(nick);
-    client->set_realname(real.erase(real.size() - 1));
-    return 1;
+    return splitStrings;
 }
 
 void    commandParser(std::string buffer,std::vector<Client> clients,Client * client)
@@ -86,7 +47,7 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     std::vector<std::string>::iterator k = ite->commands.begin();
     if ("PASS" == *k)
     {
-    //    pass(ite, server);
+       pass(ite, server);
     }
     else if ("USER" == *k )
     {
@@ -104,13 +65,14 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
 
 void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels)
 {
-    if (!client->isPassed && commandInterface(buffer, client, clients, *server))
+    std::vector <std::string> allCommands = commandSplitter(buffer);
+    for (std::vector<std::string>::iterator iter = allCommands.begin(); iter != allCommands.end(); iter++)
     {
-        std::cout << "command interface return" << std::endl;
-        return ;
+        std::string line = *iter;
+        commandParser(line, clients, client);
+        commandSearch(clients, client, server, channels);
+        client->commands.clear();
     }
-    commandParser(buffer, clients, client);
-    commandSearch(clients, client, server, channels);
 }
 
  
