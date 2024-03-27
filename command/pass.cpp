@@ -8,8 +8,6 @@ void pass(Client * client, Server * server)
     else
         pass = client->commands[1];
 
-    for (int i = 0; client->commands[1][i]; i++)
-        std::cout << (int)client->commands[1][i] << std::endl;
     if (client->commands.size() != 2)
     {
         std::string err = ERR_WRONGPARAM();

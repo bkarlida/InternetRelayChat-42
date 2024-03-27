@@ -27,7 +27,7 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
 
     if (pass == server.getPassword())
     {
-        client->isRegistered = true, client->isPassed = true;
+        client->isPassed = true;
         send(client->socket_fd, "Server: Password is correct.\r\n", 30, 0);
     }
     // else if (!pass.empty())
@@ -42,10 +42,9 @@ int commandInterface(std::string buffer, Client *client, std::vector <Client> cl
     //     size_t lenght = err.length();
     //     send(client->socket_fd, err.c_str(), lenght, 0);
     // }
-    std::cout << "Client informations updated\n";
-    if (client->get_username().empty())
+    if (client->get_username().empty() && !user.empty())
         client->set_username(user);
-    if (client->get_nickname().empty())
+    if (client->get_nickname().empty() && !nick.empty())
         client->set_nickname(nick);
     if (client->get_realname().empty() && !real.empty())
         client->set_realname(real.erase(real.size() - 1));
