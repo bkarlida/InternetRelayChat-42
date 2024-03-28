@@ -2,27 +2,20 @@
 
 void pass(Client * client, Server * server)
 {
+    std::cout << "in pass command[1]: " << client->commands[1] << std::endl;
     std::string pass;
+    if (client->isPassed)
+        return ;
     if (client->commands[1][0] == 58)
         pass = client->commands[1].substr(1, client->commands[1].size() - 1);
     else
         pass = client->commands[1];
-
+    std::cout << "in pass pass:" << pass << "size:" << pass.size() << std::endl;
     if (client->commands.size() != 2)
     {
         std::string err = ERR_WRONGPARAM();
         size_t lenght = err.length();
         send(client->socket_fd, err.c_str(), lenght, 0);
-        return ;
-    }
-    else if (client->isPassed == true)
-    {
-        if (client->isRegistered == true)
-        {
-            std::string err = ERR_ALREADYREGISTRED();
-            size_t lenght = err.length();
-            send(client->socket_fd, err.c_str(), lenght, 0);
-        }
         return ;
     }
     else if (pass != server->getPassword())

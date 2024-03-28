@@ -166,7 +166,7 @@ void Server::service(void)
                     buffer[bytes_recieved] = '\0';
                     handleBuffer(buffer, &clients[i -1], clients, this, &this->channels);
                     std::cout << " - Received data from socket " << fds[i].fd << ": #" << buffer << "#" << std::endl;
-                    clients[i - 1].commands.clear();
+                    // clients[i - 1].commands.clear();
                 }
             }
         }

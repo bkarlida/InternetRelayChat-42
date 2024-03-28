@@ -9,11 +9,6 @@ void user(std::vector<Client>& clients, Client& ite, Server& server) {
         send(ite.socket_fd, message.c_str(), message.size(), 0);
         return ;
     }
-    else if (ite.isRegistered == true) {
-        message = ERR_ALREADYREGISTRED();
-        send(ite.socket_fd, message.c_str(), message.size(), 0);
-        return;
-    }
     else if (ite.commands.size() < 5) {
         message = ERR_NEEDMOREPARAMS();
         send(ite.socket_fd, message.c_str(), message.size(), 0);
