@@ -24,28 +24,27 @@ void	join_info(std::vector<Client> clients, Client &ite, Channel &channels)
 		message_join((*itera), RPL_ENDOFNAMES((*itera)->get_nickname(), channels.ChannelName));
 	}
 }
-int	join_check(std::vector <Channel>::iterator itChannels, Client &ite)
-{
-	for(std::vector <Client *>::iterator itera = itChannels->users.begin() ; itera != itChannels->users.end(); itera++)
-	{
-		if((*itera)->get_nickname() == ite.get_nickname())
-			return (1);
-	}
-	return (0);
-}
+// int	join_check(std::vector <Channel>::iterator itChannels, Client &ite)
+// {
+// 	for(std::vector <Client *>::iterator itera = itChannels->users.begin() ; itera != itChannels->users.end(); itera++)
+// 	{
+// 		if((*itera)->get_nickname() == ite.get_nickname())
+// 			return (1);
+// 	}
+// 	return (0);
+// }
 void	join(std::vector<Client> clients, Client &ite, Server &server, std::vector <Channel> &channels)
 {
 	std::vector<std::string>::iterator k = ite.commands.begin();
 	*k++;
 	if(k[0][0] == '#')
-	{annelName == *
+	{
 		for (std::vector<Channel>::iterator itChannels = channels.begin(); itChannels != channels.end(); itChannels++)
 		{
-			std::cout << "in join: *k: " << *k << std::endl << "channelName: " << itChannels->ChannelName << std::endl;
-			if(itChannels->Chk)
+			if(itChannels->ChannelName == *k)
 			{
-				if(join_check(itChannels, ite) == 1)
-					return ;
+				// if(join_check(itChannels, ite) == 1)
+				// 	return ;
 				Client *userPtr1 = &ite;
 				itChannels->createUser(userPtr1);
 				ite.isjoined.push_back(*itChannels);

@@ -14,8 +14,21 @@ void message_for_topic(Client &ite, std::string message)
 void sendmessage(Client &ite, std::string message)
 {
     std::string buffer = ite.getPrefix() + " "  +  message + "\r\n";
-    send(ite.socket_fd, buffer.c_str(), buffer.size(), 0);
+    int response = send(ite.socket_fd, buffer.c_str(), buffer.size(), 0);
+    if (response < 0)
+        std::cout << "sendMessage error occured!\n";
 }
+
+// std::string setDefaultNick(Client & client, std::vector<Client> clients, std::string newNickName)
+// {
+//     std::string defaultNick = "default";
+//     int addition = 1;
+//     for( ; addition < INT_MAX; addition++)
+//     {
+//         std::string tempNick = defaultNick + addition.to_string();
+//         if (defaultNick + std::to_string(addition))
+//     }
+// }
 
 int isNickValid(Client & client, std::vector<Client> clients, std::string newNickName)
 {
@@ -24,7 +37,7 @@ int isNickValid(Client & client, std::vector<Client> clients, std::string newNic
     for (size_t i = 0; i < newNickName.length(); i++) {
         if (!std::isprint(newNickName[i]) || (i == 0 && std::isdigit(newNickName[i]))) {
             std::string error = ERR_ERRONEUSNICKNAME(newNickName);
-            std::cout << "ERROR: " << error << std::endl;
+            std::cout << "ERROR: " << error << " on fd: " << client.socket_fd << std::endl;
             send(client.socket_fd, error.c_str(), error.size(), 0);
             return 0;
         }
@@ -34,6 +47,7 @@ int isNickValid(Client & client, std::vector<Client> clients, std::string newNic
     for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it) {
         if (it->get_nickname() == newNickName) {
             std::string error = ERR_NICKNAMEINUSE(newNickName);
+            // newNickName = setDefaultNick(client, clients, newNickName);
             std::cout << "ERROR: " << error << std::endl;
             send(client.socket_fd, error.c_str(), error.size(), 0);
             return 0;
