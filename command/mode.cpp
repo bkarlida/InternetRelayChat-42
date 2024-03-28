@@ -1,7 +1,7 @@
 
 #include "command.hpp"
 
-void MODE(std::vector<Client> clients, Client ite, Server &server, std::vector <Channel> channels)
+void mode(std::vector<Client> clients, Client ite, Server &server, std::vector <Channel> channels)
 {
 	std::vector<std::string>::iterator k = ite.commands.begin();
 	std::string names;

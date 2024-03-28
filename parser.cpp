@@ -65,6 +65,18 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     {
         join(clients, *ite, *server, *channels);
     }
+    else if ("WHO" == *k )
+    {
+        who(clients, *ite, *server, *channels);
+    }
+    else if ("MODE" == *k )
+    {
+        mode(clients, *ite, *server, *channels);
+    }
+    else if ("TOPIC" == *k )
+    {
+        mode(clients, *ite, *server, *channels);
+    }
 }
 
 
