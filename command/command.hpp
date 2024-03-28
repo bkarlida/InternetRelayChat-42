@@ -22,4 +22,5 @@ int  isNickValid(Client & client, std::vector<Client> clients, std::string newNi
 void sendmessage(Client &ite, std::string message);
 void message_for_topic(Client &ite, std::string message);
 void message_join(Client *ite, std::string message);
+void join(std::vector<Client> clients, Client &ite, Server &server, std::vector <Channel> &channels);
 

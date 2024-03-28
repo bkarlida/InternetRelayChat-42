@@ -38,10 +38,11 @@ void	join(std::vector<Client> clients, Client &ite, Server &server, std::vector 
 	std::vector<std::string>::iterator k = ite.commands.begin();
 	*k++;
 	if(k[0][0] == '#')
-	{
+	{annelName == *
 		for (std::vector<Channel>::iterator itChannels = channels.begin(); itChannels != channels.end(); itChannels++)
 		{
-			if(itChannels->ChannelName == *k)
+			std::cout << "in join: *k: " << *k << std::endl << "channelName: " << itChannels->ChannelName << std::endl;
+			if(itChannels->Chk)
 			{
 				if(join_check(itChannels, ite) == 1)
 					return ;

@@ -61,6 +61,10 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     {
         nick(clients, *ite, *server, *channels);
     }
+    else if ("JOIN" == *k )
+    {
+        join(clients, *ite, *server, *channels);
+    }
 }
 
 
