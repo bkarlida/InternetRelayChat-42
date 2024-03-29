@@ -6,6 +6,13 @@ void nick(std::vector<Client>& clients, Client& ite, Server& server, std::vector
 
     commandIterator++;
     std::cout << "in nick function\n";
+    std::string error;
+    if (ite.commands.size() == 1)
+	{
+		error = ERR_NONICKNAMEGIVEN();
+		send(ite.socket_fd, error.c_str() , error.size(), 0);
+        return;
+	}
 
     std::string newNickname = *commandIterator;
     int isNickValidFlag = isNickValid(ite, clients, newNickname);

@@ -41,7 +41,7 @@ void    commandParser(std::string buffer,std::vector<Client> clients,Client * cl
  
  }
 
-void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std::vector <Channel> *channels)
+void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std::vector <Channel> *channels, std::string buffer)
 {
     std::vector<std::string>::iterator k = ite->commands.begin();
     std::cout << "commandSearch: " << *k << std::endl; 
@@ -77,6 +77,10 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     {
         topic(clients, *ite, *server, *channels);
     }
+    else if ("PRIVMSG" == *k )
+    {
+        privmsg(clients, *ite, *channels, buffer);
+    }
 }
 
 
@@ -87,7 +91,7 @@ void handleBuffer(std::string buffer, Client *client, std::vector <Client> clien
     {
         std::string line = *iter;
         commandParser(line, clients, client);
-        commandSearch(clients, client, server, channels);
+        commandSearch(clients, client, server, channels, buffer);
         client->commands.clear();
     }
 }

@@ -19,6 +19,18 @@ void sendmessage(Client &ite, std::string message)
         std::cout << "sendMessage error occured!\n";
 }
 
+void    sendmessage2(Client &sender, int socketfd, std::string message)
+{
+    std::string buffer = sender.getPrefix() + " "  +  message + "\r\n";
+    send(socketfd, buffer.c_str(), buffer.size(), 0);
+}
+
+void sendmessage_privmsg(Client &ite,Client *clients,std::string message)
+{
+	std::string buffer = ite.getPrefix() + " "  +  message + "\r\n";
+	send(clients->socket_fd, buffer.c_str(), buffer.size(), 0);
+}
+
 int isNickValid(Client & client, std::vector<Client> clients, std::string newNickName)
 {
     std::cout << "in isNickValid:" << newNickName << std::endl;
