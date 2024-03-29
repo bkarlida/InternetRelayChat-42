@@ -45,5 +45,4 @@ class Channel;
 # include "./command/command.hpp"
 
 Client * getClientByFd(std::vector <Client> clients, int fd);
-int 	commandInterface(std::string buffer, Client *client, std::vector <Client> clients);
 void    handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels);
