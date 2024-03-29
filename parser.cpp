@@ -75,7 +75,7 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     }
     else if ("TOPIC" == *k )
     {
-        mode(clients, *ite, *server, *channels);
+        topic(clients, *ite, *server, *channels);
     }
 }
 

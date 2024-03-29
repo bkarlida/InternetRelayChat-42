@@ -25,6 +25,7 @@ void message_join(Client *ite, std::string message);
 void join(std::vector<Client> clients, Client &ite, Server &server, std::vector <Channel> &channels);
 void who(std::vector<Client> clients, Client ite, Server &server, std::vector <Channel> &channel);
 void mode(std::vector<Client> clients, Client ite, Server &server, std::vector <Channel> channels);
+void topic(std::vector<Client> &clients, Client &ite, Server &server, std::vector <Channel> &channels);
 
 
 
