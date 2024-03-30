@@ -82,7 +82,7 @@ void Server::service(void)
     socklen_t addressLen = sizeof(clientAddress);
     std::vector<Client> clients;
 
-    // Clearing socket fds and setting it as created socket descriptor
+    // Clearing socket fds and setting it created socket descriptor
     fds[0].fd = _socket;
     fds[0].events = POLLIN;
 

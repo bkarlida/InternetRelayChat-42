@@ -15,7 +15,7 @@
 # define RPL_ENDOFWHO(nickname, channel) "315 " + nickname + " " + channel + " :End of /WHO list" + "\r\n"
 # define ERR_NEEDMOREPARAMS(cmd) (std::string("461 ") + cmd + " :Not enough parameter" + "\r\n")
 # define ERR_NONICKNAMEGIVEN() ("431 :No nickname given\r\n")
-# define ERR_NICKNAMEINUSE(nick) ("462 " + nick + " :Nickname is already in use" + "\r\n")
+# define ERR_NICKNAMEINUSE(nick) ("433 " + nick + " :Nickname is already in use" + "\r\n")
 # define ERR_ERRONEUSNICKNAME(nick) ("432 " + nick + " :Erroneus nickname")
 # define ERR_ALREADYREGISTRED() ("462 :The client is already registered\r\n")
 # define ERR_NEEDREGISTER() ("462 :The client need to register. Use PASS and USER commands.\r\n")
