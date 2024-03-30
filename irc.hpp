@@ -46,3 +46,4 @@ class Channel;
 
 Client * getClientByFd(std::vector <Client> clients, int fd);
 void    handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels);
+void    handleNc(std::string buffer,std::vector<Client> clients,Client &it, Server & server);

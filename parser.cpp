@@ -1,6 +1,5 @@
 #include "client.hpp"
 #include "server.hpp"
-#include "./command/command.hpp"
 std::vector <std::string> commandSplitter(std::string buffer)
 {
     std::stringstream stringStream(buffer);
@@ -12,12 +11,14 @@ std::vector <std::string> commandSplitter(std::string buffer)
 
 void    commandParser(std::string buffer,std::vector<Client> clients,Client * client)
 {
+    std::cout << "last: " << (int)buffer[buffer.size() - 1] << " " << (int)buffer[buffer.size() - 2] << std::endl;
     int a;
-    if (buffer[buffer.length() - 2] == '\r')
-        a = buffer.length() - 2;
+    if (buffer[buffer.size() - 2] == 13)
+        a = buffer.size() - 2;
     else
-        a = buffer.length() - 1;
+        a = buffer.size();
     std::string temp = buffer.substr(0,a);
+    std::cout << "From parser: " << temp << " a: " << a << std::endl;
     int index;
     int flag;
     for(int i = 0; i < a; i++)
@@ -35,11 +36,9 @@ void    commandParser(std::string buffer,std::vector<Client> clients,Client * cl
         if (flag == 1)
             client->commands.push_back(temp.substr(index, i - index));
     }
-
     for (const std::string& command : client->commands) {
         std::cout << "$" << command << std::endl;
     }
- 
  }
 
 void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std::vector <Channel> *channels, std::string buffer)
@@ -92,9 +91,15 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     }
 }
 
-
 void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels)
 {
+    std::cout << "buffer last 3: " << (int)buffer[buffer.size() - 1] << " " << (int)buffer[buffer.size() - 2] << " " << (int)buffer[buffer.size() - 3] << std::endl;
+    if (buffer[buffer.size() - 2] != 13 && !client->isRegistered)
+    {
+        std::cout << "***from nc\n";
+        handleNc(buffer, clients, *client, *server);
+        return ;
+    }
     std::vector <std::string> allCommands = commandSplitter(buffer);
     for (std::vector<std::string>::iterator iter = allCommands.begin(); iter != allCommands.end(); iter++)
     {
