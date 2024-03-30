@@ -1,5 +1,6 @@
 #include "client.hpp"
 #include "server.hpp"
+#include "./command/command.hpp"
 std::vector <std::string> commandSplitter(std::string buffer)
 {
     std::stringstream stringStream(buffer);
@@ -80,6 +81,14 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
     else if ("PRIVMSG" == *k )
     {
         privmsg(clients, *ite, *channels, buffer);
+    }
+    else if ("CAP" == *k )
+    {
+        cap(clients, *ite, *server);
+    }
+    else if ("KICK" == *k )
+    {
+        kick(clients, *ite, *server, *channels);
     }
 }
 
