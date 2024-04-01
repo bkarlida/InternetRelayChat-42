@@ -11,7 +11,9 @@ std::vector <std::string> commandSplitter(std::string buffer)
 
 void    commandParser(std::string buffer,std::vector<Client> clients,Client * client)
 {
-    std::cout << "last: " << (int)buffer[buffer.size() - 1] << " " << (int)buffer[buffer.size() - 2] << std::endl;
+    std::cout << "Parser: \n";
+    for (int i = 0; buffer[i]; i++)
+        std::cout << (int)buffer[i] << " \n";
     int a;
     if (buffer[buffer.size() - 2] == 13)
         a = buffer.size() - 2;
@@ -102,12 +104,27 @@ void commandSearch(std::vector<Client> clients, Client *ite, Server *server, std
 void handleBuffer(std::string buffer, Client *client, std::vector <Client> clients, Server * server, std::vector <Channel> *channels)
 {
     // std::cout << "buffer last 3: " << (int)buffer[buffer.size() - 1] << " " << (int)buffer[buffer.size() - 2] << " " << (int)buffer[buffer.size() - 3] << std::endl;
-    // if (buffer[buffer.size() - 2] != 13 && !client->isRegistered)
-    // {
-    //     std::cout << "***from nc\n";
-    //     handleNc(buffer, clients, *client, *server);
-    //     return ;
-    // }
+    for (int i = 0; buffer[i]; i++)
+        std::cout << (int)buffer[i] << " \n";
+    if (buffer.size() < 4 && client->isRegistered)
+        return ;
+    else if (buffer[buffer.size() - 2] != 13 && !client->isRegistered)
+    {
+        std::cout << "***from nc\n";
+        handleNc(buffer, clients, *client, *server);
+        return ;
+    }
+    else if (buffer[buffer.size() - 2] != 13)
+    {
+        int i = 0;
+        while (buffer[i])
+            i++;
+        if (buffer[i - 1] == '\n')
+        {
+            buffer[i - 1] = '\r';
+            buffer += "\n";
+        }
+    }
     std::vector <std::string> allCommands = commandSplitter(buffer);
     for (std::vector<std::string>::iterator iter = allCommands.begin(); iter != allCommands.end(); iter++)
     {
