@@ -11,6 +11,7 @@ void	nick(std::vector<Client> &clients, Client &ite, Server &server, std::vector
 	int size = clients.size();
 	k++;
 	std::string error;
+	
 	for (int i = 0; i < k->length(); i++)
 	{
 		if (!std::isprint(k[0][i]))

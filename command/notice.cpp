@@ -25,7 +25,7 @@ void	notice(std::vector<Client> clients, Client &ite, std::vector <Channel> &cha
 		{
 			for(std::vector<Client>::iterator itClients = clients.begin(); itClients != clients.end(); itClients++)
 			{
-				if(itClients->get_nickname() == itArgs[1] && ite.get_nickname() != itClients->get_nickname())
+				if(itClients->get_nickname() == itArgs[1] && ite.get_nickname() != itClients->get_nickname())	
 				{
 					std::string buffer1 = ite.getPrefix() + " "  + message1 +"\r\n";
 					send(itClients->socket_fd, buffer1.c_str(), buffer1.size(), 0);

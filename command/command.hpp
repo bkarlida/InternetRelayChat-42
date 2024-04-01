@@ -26,3 +26,5 @@ void topic(std::vector<Client> &clients, Client &ite, Server &server, std::vecto
 void privmsg(std::vector<Client> clients, Client &ite, std::vector <Channel> &channel, std::string buffer);
 void kick(std::vector<Client> clients, Client &ite, Server &server, std::vector <Channel> &channels);
 void cap(std::vector<Client> clients, Client ite, Server &server);
+void notice(std::vector<Client> clients, Client &ite, std::vector <Channel> &channel);
+void part(std::vector<Client> clients, Client &ite, Server &server, std::vector <Channel> &channels);
